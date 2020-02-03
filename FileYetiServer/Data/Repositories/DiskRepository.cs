@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace FileYetiServer.Data
+namespace FileYetiServer.Data.Repositories
 {
     public interface IDiskRepository
     {
-        void StreamBytesToFile(string path, byte[] bytes);
+        void StreamBytesToFile(string fileName, byte[] bytes);
         void RenameFile(string basePath, string oldName, string newName);
     }
+
     public class DiskRepository : IDiskRepository
     {
-        public void StreamBytesToFile(string path, byte[] bytes)
+        private readonly string _storageRoot;
+
+        public DiskRepository(string storageRoot)
         {
-            using (var stream = new FileStream(path, FileMode.Append))
+            _storageRoot = storageRoot;
+        }
+
+        public void StreamBytesToFile(string fileName, byte[] bytes)
+        {
+            using (var stream = new FileStream(Path.Combine(_storageRoot, fileName), FileMode.Append))
             {
                 stream.Write(bytes, 0, bytes.Length);
             }

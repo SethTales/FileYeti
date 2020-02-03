@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FileYetiServer.Models;
+﻿using FileYetiServer.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileYetiServer.Data

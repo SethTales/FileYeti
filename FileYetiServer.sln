@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileYetiServer", "FileYetiServer\FileYetiServer.csproj", "{2E11AA34-DF3D-4B09-901B-5DF27DE67CE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileYetiServerTests", "FileYetiServerTests\FileYetiServerTests.csproj", "{02BC2BE0-952B-416B-8B37-1C80E979B4F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileYetiServerTests", "FileYetiServerTests\FileYetiServerTests.csproj", "{02BC2BE0-952B-416B-8B37-1C80E979B4F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileYeti.SharedModels", "FileYeti.SharedModels\FileYeti.SharedModels.csproj", "{5AF02D10-F38B-428A-B62F-39CF27CCF45E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{02BC2BE0-952B-416B-8B37-1C80E979B4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02BC2BE0-952B-416B-8B37-1C80E979B4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02BC2BE0-952B-416B-8B37-1C80E979B4F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AF02D10-F38B-428A-B62F-39CF27CCF45E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AF02D10-F38B-428A-B62F-39CF27CCF45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AF02D10-F38B-428A-B62F-39CF27CCF45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AF02D10-F38B-428A-B62F-39CF27CCF45E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

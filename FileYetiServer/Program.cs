@@ -1,16 +1,27 @@
-﻿using FileYetiServer.Data;
+﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using FileYetiServer.Data.Repositories;
+using FileYetiServer.Handlers;
 using FileYetiServer.Services;
 
 namespace FileYetiServer
 {
-    public class MyTcpListener
+    public class Program
     {
         public static void Main()
         {
             var transferJobRepository = new TransferJobRepository();
-            var diskRepository = new DiskRepository();
             var storageRoot = "C:/temp";
-            var listenerService = new ListenerService(transferJobRepository, diskRepository, storageRoot);
+            var diskRepository = new DiskRepository(storageRoot);
+
+            Int32 port = 13000;
+            IPAddress localAddr = IPAddress.Any;
+            var server = new TcpListener(localAddr, port);
+            TcpClient client = new TcpClient();
+
+            var handlerFactory = new HandlerFactory(transferJobRepository, diskRepository, server, client);
+            var listenerService = new ListenerService(server, client, handlerFactory);
 
             listenerService.Listen();
         }

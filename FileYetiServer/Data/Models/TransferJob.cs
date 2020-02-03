@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using FileYeti.SharedModels.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace FileYetiServer.Models
+namespace FileYetiServer.Data.Models
 {
     public class TransferJob
     {

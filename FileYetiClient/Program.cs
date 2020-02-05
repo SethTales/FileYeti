@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using FileYetiClient.Adapters;
+using FileYetiClient.Services;
 using Newtonsoft.Json;
 
 namespace FileYetiClient
@@ -13,8 +15,11 @@ namespace FileYetiClient
     {
         static void Main(string[] args)
         {
-            var senderService = new SenderService();
-            senderService.SendData(32768, Path.Combine(Directory.GetCurrentDirectory(), "1000_files_1kb_each.zip"));
+            var chunkSizeBytes = Int32.Parse(args[0]);
+            var sourcePath = args[1];
+            var adapterFactory = new AdapterFactory();
+            var senderService = new SenderService(adapterFactory, chunkSizeBytes, sourcePath);
+            senderService.Send();
         }
 
         

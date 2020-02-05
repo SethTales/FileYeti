@@ -8,30 +8,36 @@ using Newtonsoft.Json;
 
 namespace FileYetiServer.Handlers
 {
-    public class CompleteJobHandler : ICommandHandler
+    public class ReceiveChunkHandler : ICommandHandler
     {
         private readonly ITransferJobRepository _jobRepository;
+        private readonly IDiskRepository _diskRepository;
 
-        public CompleteJobHandler(ITransferJobRepository jobRepository)
+        public ReceiveChunkHandler(ITransferJobRepository jobRepository, IDiskRepository diskRepository)
         {
             _jobRepository = jobRepository;
+            _diskRepository = diskRepository;
         }
 
         public void Handle(NetworkStream stream, RequestHeaders headers, TcpClient client)
         {
             if (client.Connected)
             {
+                var bytes = new byte[headers.ChunkSizeBytes];
+
+                stream.Read(bytes, 0, bytes.Length);
+                _diskRepository.StreamBytesToFile(headers.FileName, bytes);
                 _jobRepository.UpdateJob(headers);
-                var completeJobResponse = new CompleteJobResponse
+
+                var uploadChunkResponse = new UploadChunkResponse
                 {
                     JobGuid = headers.JobGuid,
-                    Status = JobStatus.Complete,
-                    TotalChunksProcessed = _jobRepository.RetrieveJob(headers.JobGuid).TotalChunksReceived
+                    ChunkNumber = headers.ChunkNumber,
+                    Status = JobStatus.Processing
                 };
-                var jsonResponse = JsonConvert.SerializeObject(completeJobResponse);
+                var jsonResponse = JsonConvert.SerializeObject(uploadChunkResponse);
                 byte[] responseMessage = Encoding.ASCII.GetBytes(jsonResponse);
                 stream.Write(responseMessage, 0, responseMessage.Length);
-                client.Close();
             }
         }
     }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,9 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="1000_files_1kb_each.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\FileYeti.SharedModels\FileYeti.SharedModels.csproj" />
   </ItemGroup>
 
 </Project>

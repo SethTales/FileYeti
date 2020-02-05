@@ -10,15 +10,15 @@ namespace FileYetiServer.Handlers
     {
         private readonly Dictionary<CommandType, (Type classType, object[] ctorArgs)> _commandTypeHandlerMap;
 
-        public HandlerFactory(ITransferJobRepository jobRepository, IDiskRepository diskRepository, TcpListener server, TcpClient client)
+        public HandlerFactory(ITransferJobRepository jobRepository, IDiskRepository diskRepository, TcpListener server)
         {
             _commandTypeHandlerMap =
                 new Dictionary<CommandType, (Type, object[])>
                 {
-                    {CommandType.InitiateUpload, (typeof(InitiateUploadHandler), new object[] { jobRepository }) },
-                    {CommandType.UploadChunk, (typeof(UploadChunkHandler), new object[] { jobRepository, diskRepository} )},
+                    {CommandType.InitiateUpload, (typeof(InitiateJobHandler), new object[] { jobRepository }) },
+                    {CommandType.UploadChunk, (typeof(ReceiveChunkHandler), new object[] { jobRepository, diskRepository} )},
                     {CommandType.CompleteJob, (typeof(CompleteJobHandler), new object[] { jobRepository } )},
-                    {CommandType.Terminate, (typeof(TerminationHandler), new object[] { server, client } )}
+                    {CommandType.Terminate, (typeof(TerminationHandler), new object[] { server } )}
                 };
         }
 

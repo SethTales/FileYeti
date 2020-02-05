@@ -8,30 +8,27 @@ using Newtonsoft.Json;
 
 namespace FileYetiServer.Handlers
 {
-    public class CompleteJobHandler : ICommandHandler
+    public class InitiateJobHandler : ICommandHandler
     {
         private readonly ITransferJobRepository _jobRepository;
 
-        public CompleteJobHandler(ITransferJobRepository jobRepository)
+        public InitiateJobHandler(ITransferJobRepository jobRepository)
         {
             _jobRepository = jobRepository;
         }
-
         public void Handle(NetworkStream stream, RequestHeaders headers, TcpClient client)
         {
             if (client.Connected)
             {
-                _jobRepository.UpdateJob(headers);
-                var completeJobResponse = new CompleteJobResponse
+                var jobGuid = _jobRepository.CreateJob(headers);
+                var createJobResponse = new UpdateJobResponse
                 {
-                    JobGuid = headers.JobGuid,
-                    Status = JobStatus.Complete,
-                    TotalChunksProcessed = _jobRepository.RetrieveJob(headers.JobGuid).TotalChunksReceived
+                    JobGuid = jobGuid,
+                    Status = JobStatus.Received
                 };
-                var jsonResponse = JsonConvert.SerializeObject(completeJobResponse);
+                var jsonResponse = JsonConvert.SerializeObject(createJobResponse);
                 byte[] responseMessage = Encoding.ASCII.GetBytes(jsonResponse);
                 stream.Write(responseMessage, 0, responseMessage.Length);
-                client.Close();
             }
         }
     }

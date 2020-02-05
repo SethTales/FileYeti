@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileYetiClient": {
+      "commandName": "Project",
+      "commandLineArgs": "1048576 D:\\Data\\smoke1.zip"
+    }
+  }
+}

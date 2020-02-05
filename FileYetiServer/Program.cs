@@ -20,7 +20,7 @@ namespace FileYetiServer
             var server = new TcpListener(localAddr, port);
             TcpClient client = new TcpClient();
 
-            var handlerFactory = new HandlerFactory(transferJobRepository, diskRepository, server, client);
+            var handlerFactory = new HandlerFactory(transferJobRepository, diskRepository, server);
             var listenerService = new ListenerService(server, client, handlerFactory);
 
             listenerService.Listen();

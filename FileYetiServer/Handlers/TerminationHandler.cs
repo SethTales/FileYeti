@@ -11,27 +11,25 @@ namespace FileYetiServer.Handlers
     public class TerminationHandler : ICommandHandler
     {
         private readonly TcpListener _server;
-        private readonly TcpClient _client;
 
-        public TerminationHandler(TcpListener server, TcpClient client)
+        public TerminationHandler(TcpListener server)
         {
             _server = server;
-            _client = client;
         }
 
-        public void Handle(NetworkStream stream, RequestHeaders headers)
+        public void Handle(NetworkStream stream, RequestHeaders headers, TcpClient client)
         {
-            if (_client.Connected)
+            if (client.Connected)
             {
-                var uploadChunkResponse = new TerminationResponse
+                var terminationResponse = new TerminationResponse
                 {
                     JobGuid = headers.JobGuid,
                     Status = JobStatus.Paused
                 };
-                var jsonResponse = JsonConvert.SerializeObject(uploadChunkResponse);
+                var jsonResponse = JsonConvert.SerializeObject(terminationResponse);
                 byte[] responseMessage = Encoding.ASCII.GetBytes(jsonResponse);
                 stream.Write(responseMessage, 0, responseMessage.Length);
-                _client.Close();
+                client.Close();
             }
 
             stream.Close();

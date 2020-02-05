@@ -42,7 +42,7 @@ namespace FileYetiServer.Services
 
                         var requestHeaders = ReadRequestHeaders(stream);
                         ICommandHandler handler = _handlerFactory.SelectHandler(requestHeaders.CommandType);
-                        handler.Handle(stream, requestHeaders);
+                        handler.Handle(stream, requestHeaders, _client);
                     }
                 }
                 catch (SocketException e)

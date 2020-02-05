@@ -8,6 +8,6 @@ namespace FileYetiServer.Handlers
 {
     public interface ICommandHandler
     {
-        void Handle(NetworkStream stream, RequestHeaders headers);
+        void Handle(NetworkStream stream, RequestHeaders headers, TcpClient client = null);
     }
 }

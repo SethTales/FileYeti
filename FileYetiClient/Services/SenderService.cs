@@ -30,7 +30,7 @@ namespace FileYetiClient.Services
                 {
                     using (var reader = _adapterFactory.BuildReaderAdapter(_sourcePath))
                     {
-                        var numberOfChunks = (int)reader.StreamLength / _chunkSizeBytes + 1;
+                        var numberOfChunks = (int)reader.StreamLength / _chunkSizeBytes;
                         var fileName = _sourcePath.Split(Path.DirectorySeparatorChar).Last();
                         var initiateJobResponse = clientAdapter.SendInitiateJobRequest(fileName, _chunkSizeBytes, numberOfChunks);
                         var jobGuid = initiateJobResponse.JobGuid;
@@ -38,18 +38,15 @@ namespace FileYetiClient.Services
                         for (int i = 0; i < numberOfChunks; i++)
                         {
                             byte[] chunkBytes = new byte[_chunkSizeBytes];
-
-                            if (i == numberOfChunks - 1)
-                            {
-                                reader.
-                            }
-
                             reader.Read(chunkBytes, 0, chunkBytes.Length);
-
-
                             var updateJobResponse = clientAdapter.SendUploadChunkRequest(fileName, jobGuid, i + 1,
                                 chunkBytes);
 
+                            if (i == numberOfChunks - 1)
+                            {
+                                var finalChunk = reader.ReadToEnd();
+                                updateJobResponse = clientAdapter.SendUploadChunkRequest(fileName, jobGuid, i + 1, finalChunk, finalChunk.Length);
+                            }
                         }
                         clientAdapter.SendCompleteJobRequest(jobGuid);
                     }

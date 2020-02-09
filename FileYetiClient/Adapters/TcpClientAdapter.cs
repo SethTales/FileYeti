@@ -11,7 +11,7 @@ namespace FileYetiClient.Adapters
     {
         UpdateJobResponse SendInitiateJobRequest(string fileName, int chunkSizeBytes, int totalChunks);
 
-        UpdateJobResponse SendUploadChunkRequest(string fileName, Guid jobGuid, int chunkNumber, byte[] sourceDataChunk);
+        UpdateJobResponse SendUploadChunkRequest(string fileName, Guid jobGuid, int chunkNumber, byte[] sourceDataChunk, int? chunkSizeBytes = null);
 
         CompleteJobResponse SendCompleteJobRequest(Guid jobGuid);
     }
@@ -52,7 +52,7 @@ namespace FileYetiClient.Adapters
             return createJobResponse;
         }
 
-        public UpdateJobResponse SendUploadChunkRequest(string fileName, Guid jobGuid, int chunkNumber, byte[] sourceDataChunk)
+        public UpdateJobResponse SendUploadChunkRequest(string fileName, Guid jobGuid, int chunkNumber, byte[] sourceDataChunk, int? chunkSizeBytes = null)
         {
             var headers = new RequestHeaders
             {
@@ -60,7 +60,7 @@ namespace FileYetiClient.Adapters
                 FileName = fileName,
                 JobGuid = jobGuid,
                 CommandType = CommandType.UploadChunk,
-                ChunkSizeBytes = _chunkSizeBytes
+                ChunkSizeBytes = chunkSizeBytes ?? _chunkSizeBytes //the final chunk will usually be smaller than the default chunk size
             };
             var serializedHeaders = _requestHandler.SerializeHeaders(headers);
             var serializedData = _requestHandler.SerializeData(headers, serializedHeaders, sourceDataChunk);

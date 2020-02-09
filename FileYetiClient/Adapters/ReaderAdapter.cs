@@ -6,7 +6,7 @@ namespace FileYetiClient.Adapters
     public interface IReaderAdapter : IDisposable
     {
         void Read(byte[] buffer, int index, int count);
-        void ReadToEnd();
+        byte[] ReadToEnd();
         long StreamLength { get; }
 
     }
@@ -27,9 +27,13 @@ namespace FileYetiClient.Adapters
             _reader.Read(buffer, index, count);
         }
 
-        public void ReadToEnd()
+        public byte[] ReadToEnd()
         {
-            //TODO: implement logic to handle the last chunk, where reading a number of empty bytes into the stream is causing the file to be corrupted
+            var currentPosition = _reader.BaseStream.Position;
+            var finalChunkSize = StreamLength - currentPosition;
+            var finalChunkBuffer = new byte[finalChunkSize];
+            _reader.Read(finalChunkBuffer, 0, finalChunkBuffer.Length);
+            return finalChunkBuffer;
         }
 
         public void Dispose()
